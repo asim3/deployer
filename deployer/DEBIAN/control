@@ -1,0 +1,9 @@
+Package: deployer
+Version: 0.1
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Installed-Size: 1024
+Maintainer: Asim Altuwayjiri
+Description: Deploy a Scalable and Secure Applications with Kubernetes.

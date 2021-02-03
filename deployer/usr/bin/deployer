@@ -1,0 +1,13 @@
+DEPLOYER_BASE_DIR=$(pwd)
+
+export DEPLOYER_BASE_DIR
+
+echo '1: ' $DEPLOYER_BASE_DIR 
+
+echo '2: hello from /usr/bin/'
+
+
+source /usr/lib/deployer/get-base-directory
+
+cd DEPLOYER_BASE_DIR
+unset DEPLOYER_BASE_DIR
