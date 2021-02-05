@@ -1,5 +1,6 @@
 Package: deployer
 Version: 0.1
+Depends: python3-venv
 Section: custom
 Priority: optional
 Architecture: all
