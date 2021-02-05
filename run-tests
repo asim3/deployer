@@ -1,0 +1,48 @@
+#!/bin/bash
+
+OLD_DIR=$(pwd)
+TEST_DONE=0
+
+clean_up () {
+    cd $OLD_DIR
+    unset OLD_DIR
+}
+
+
+clean_up_and_exit () {
+    clean_up;
+    exit 1;
+}
+
+
+install_deployer () {
+    dpkg-deb --build $OLD_DIR/deployer \
+      && sudo dpkg --install $OLD_DIR/deployer.deb \
+      || exit 1;
+}
+
+
+run_test () {
+    printf "Testing $1: "
+    cd /tmp/test-deployer
+    $OLD_DIR/tests/$1 > /dev/null
+    if [ "$?" -ne "0" ]; then
+        clean_up_and_exit
+    else
+        echo "Done";
+        TEST_DONE=$(($TEST_DONE + 1));
+    fi
+}
+
+
+rm -rf /tmp/test-deployer
+mkdir  /tmp/test-deployer
+cd     /tmp/test-deployer
+
+install_deployer > /dev/null
+
+run_test "01_test_empty_dir"
+run_test "05_initiate_project" <<< "my_stdin"
+run_test "08_test_multiple_dir"
+
+echo "Done. Ran $TEST_DONE tests."

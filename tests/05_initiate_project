@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+deployer init my_project
+deployer init

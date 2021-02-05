@@ -1,3 +1,0 @@
-echo '3: ' $DEPLOYER_BASE_DIR 
-
-echo '4: hello from /usr/lib/deployer/'

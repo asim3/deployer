@@ -1,13 +1,16 @@
-DEPLOYER_BASE_DIR=$(pwd)
+#!/bin/bash
 
-export DEPLOYER_BASE_DIR
-
-echo '1: ' $DEPLOYER_BASE_DIR 
-
-echo '2: hello from /usr/bin/'
+clean_up () {
+    unset DEPLOYER_BASE_DIR
+}
 
 
-source /usr/lib/deployer/get-base-directory
+clean_up_and_exit () {
+    clean_up;
+    exit $1;
+}
 
-cd DEPLOYER_BASE_DIR
-unset DEPLOYER_BASE_DIR
+
+/usr/lib/deployer/index $@ || clean_up_and_exit $?
+
+clean_up

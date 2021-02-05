@@ -1,0 +1,11 @@
+#!/bin/bash
+
+test_not_found () {
+    deployer &> /dev/null
+    if [ "$?" -ne "104" ]; then
+        echo "deployer not supposed to find any file";
+        exit 1;
+    fi
+}
+
+test_not_found

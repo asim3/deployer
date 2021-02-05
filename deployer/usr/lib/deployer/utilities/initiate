@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DEPLOYER_INIT_DIR=$(pwd)
+
+
+if [ -n "$2" ]; then 
+  PROJECT_NAME="$2"; 
+else
+  printf "Kindly enter your project name: "
+  read PROJECT_NAME
+fi;
+
+
+[[ -d $PROJECT_NAME ]] || mkdir $PROJECT_NAME
+cd $PROJECT_NAME
+
+[[ -d values ]] || mkdir values
+
+
+if [ ! -f values/index.ini ]; then 
+  cat <<EOF > values/index.ini
+[project]
+name=$PROJECT_NAME
+EOF
+fi
+
+
+/usr/lib/deployer/django/initiate $PROJECT_NAME

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+all_base_dir="$(find $(pwd) -type f -wholename '*/values/index.ini')"
+count_base_dir="$(find $(pwd) -type f -wholename '*/values/index.ini' | wc -l)"
+
+
+if [ "$count_base_dir" -gt "1" ]; then
+    printf "There are multiple values/index.ini files! \nKindly relocate to one of them!\n";
+    exit 105;
+elif [ "$count_base_dir" -ne "1" ]; then
+    printf "Could not find the values/index.ini file! \nKindly run: deployer init\n";
+    exit 104;
+fi
+
+
+DEPLOYER_BASE_DIR=$(echo $all_base_dir | sed -e 's/values\/index\.ini//')
+export DEPLOYER_BASE_DIR
+
+cd $DEPLOYER_BASE_DIR

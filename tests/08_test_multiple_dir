@@ -1,0 +1,7 @@
+#!/bin/bash
+
+deployer &> /dev/null
+if [ "$?" -ne "105" ]; then
+    echo "deployer supposed to find multiple files";
+    exit 1;
+fi
