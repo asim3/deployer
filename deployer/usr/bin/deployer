@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+
+
 clean_up () {
     unset DEPLOYER_BASE_DIR
 }
@@ -11,6 +14,9 @@ clean_up_and_exit () {
 }
 
 
-/usr/lib/deployer/main $@ || clean_up_and_exit $?
-
-clean_up
+if [ "$1" = "init" ]; then
+    /usr/lib/deployer/utilities/initiate $@
+else
+  /usr/lib/deployer/utilities/get-base-directory
+  cd DEPLOYER_BASE_DIR
+fi;

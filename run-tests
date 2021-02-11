@@ -10,8 +10,9 @@ clean_up () {
 
 
 clean_up_and_exit () {
+    echo "Error at: $1 with exit code $2"
     clean_up;
-    exit 1;
+    exit $2;
 }
 
 
@@ -22,16 +23,18 @@ install_deployer () {
 }
 
 
+echo_test_done () {
+    echo "Done";
+    TEST_DONE=$(($TEST_DONE + 1));
+}
+
 run_test () {
     printf "Testing $1: "
     cd /tmp/test-deployer
     $OLD_DIR/tests/$1 > /dev/null
-    if [ "$?" -ne "0" ]; then
-        clean_up_and_exit
-    else
-        echo "Done";
-        TEST_DONE=$(($TEST_DONE + 1));
-    fi
+    test_exit_code=$?
+    [ "$test_exit_code" -ne "0" ] && clean_up_and_exit $1 $test_exit_code \
+      || echo_test_done
 }
 
 

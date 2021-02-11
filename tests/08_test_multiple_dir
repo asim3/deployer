@@ -1,7 +1,17 @@
 #!/bin/bash
 
-deployer &> /dev/null
-if [ "$?" -ne "105" ]; then
+
+echo_test_error_105 () {
     echo "deployer supposed to find multiple files";
-    exit 1;
-fi
+    exit 205;
+}
+
+
+multi_dir_found () {
+    deployer
+    [ "$?" -ne "105" ] && echo_test_error_105
+}
+
+
+multi_dir_found
+exit 0;

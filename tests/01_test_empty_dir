@@ -1,11 +1,17 @@
 #!/bin/bash
 
-test_not_found () {
-    deployer &> /dev/null
-    if [ "$?" -ne "104" ]; then
-        echo "deployer not supposed to find any file";
-        exit 1;
-    fi
+
+echo_test_error_104 () {
+    echo "deployer not supposed to find any file";
+    exit 204;
 }
 
-test_not_found
+
+dir_not_found () {
+    deployer
+    [ "$?" -ne "104" ] && echo_test_error_104;
+}
+
+
+dir_not_found;
+exit 0;
