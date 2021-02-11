@@ -17,8 +17,8 @@ cd $PROJECT_NAME
 [[ -d values ]] || mkdir values
 
 
-if [ ! -f values/index.ini ]; then 
-  cat <<EOF > values/index.ini
+if [ ! -f values/main.ini ]; then 
+  cat <<EOF > values/main.ini
 [project]
 name=$PROJECT_NAME
 EOF

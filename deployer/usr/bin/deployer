@@ -11,6 +11,6 @@ clean_up_and_exit () {
 }
 
 
-/usr/lib/deployer/index $@ || clean_up_and_exit $?
+/usr/lib/deployer/main $@ || clean_up_and_exit $?
 
 clean_up
