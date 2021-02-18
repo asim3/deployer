@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# https://docs.docker.com/engine/install/ubuntu/
+
+
+distributor=$(lsb_release -is)
+distributor_codename=$(lsb_release -cs)
+docker_apt_repository="deb [arch=amd64] https://download.docker.com/linux/${distributor,,} ${distributor_codename,,} stable"
+
+
+apt_install_requirements () {
+  sudo apt-get -y update \
+    software-properties-common \
+    apt-transport-https \
+    ca-certificates \
+    gnupg2 \
+    curl
+}
+
+
+apt_install_docker () {
+  sudo apt-get -y update \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io
+}
+
+
+add_docker_apt_key () {
+  curl -Lf https://download.docker.com/linux/${distributor,,}/gpg -o /tmp/gpg \
+    && sudo apt-key add /tmp/gpg \
+    && sudo apt-key fingerprint 0EBFCD88
+  # TODO: check fingerprint () { exit 1; }
+}
+
+
+sudo apt-get -y remove docker docker-engine docker.io runc \
+  && sudo apt-get -y update \
+  && apt_install_requirements \
+  && add_docker_apt_key \
+  && sudo add-apt-repository ${docker_apt_repository} \
+  && sudo apt-get -y update \
+  && apt_install_docker \
+  && echo "done installing docker $(sudo docker version --format='{{.Client.Version}}')"
+
+sudo docker swarm init

@@ -29,7 +29,7 @@ echo_test_done () {
 }
 
 run_test () {
-    printf "Testing $1: "
+    printf "$1: "
     cd /tmp/test-deployer
     $OLD_DIR/tests/$1 > /dev/null
     test_exit_code=$?

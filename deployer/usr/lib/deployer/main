@@ -1,22 +1,56 @@
 #!/bin/bash
 
-set -e
+
+library_path="";
+library_name="${1,,}";
+program_name="${2,,}";
 
 
 clean_up () {
-    unset DEPLOYER_BASE_DIR
+    unset DEPLOYER_BASE_DIR;
 }
 
 
 clean_up_and_exit () {
     clean_up;
-    exit $1;
+    exit 1;
 }
 
 
-if [ "$1" = "init" ]; then
-    /usr/lib/deployer/utilities/initiate $@
-else
-  /usr/lib/deployer/utilities/get-base-directory
-  cd DEPLOYER_BASE_DIR
-fi;
+print_help_and_exit () {
+    cat /usr/lib/deployer/${library_name}/help.txt 2> /dev/null \
+      || cat /usr/lib/deployer/help.txt;
+    clean_up_and_exit;
+}
+
+
+set_library_path () {
+    # if library_name has zero length
+    [ -z "$library_name" ] \
+      && print_help_and_exit;
+
+    # if program_name equal to help
+    [ -d /usr/lib/deployer/${library_name} ] \
+      && [ "$program_name" = "help" ] \
+      && print_help_and_exit;
+
+    # if program_name existe
+    [  !   -d /usr/lib/deployer/${library_name}/${program_name} ] \
+      && [ -x /usr/lib/deployer/${library_name}/${program_name} ] \
+      && library_path="/usr/lib/deployer/${library_name}/${program_name}" \
+      && return 0;
+    
+    # if main program existe
+    [ -x /usr/lib/deployer/${library_name}/main ] \
+      && library_path="/usr/lib/deployer/${library_name}/main" \
+      && return 0;
+
+    print_help_and_exit;
+}
+
+
+set_library_path;
+shift;
+
+$library_path $@;
+clean_up;

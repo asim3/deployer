@@ -1,1 +1,8 @@
-TODO: add Django Help
+install       install and collectstatic
+user          createsuperuser
+
+new           add new app 
+tra           translation
+
+test          run tests
+shell         run shell
