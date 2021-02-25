@@ -1,13 +1,14 @@
 #!/bin/bash
 
 
-BASE_DIR="$(dirname $BASH_SOURCE)"
-TEST_DONE=0
+BASE_DIR="$(dirname $BASH_SOURCE)";
+TEST_DONE=0;
+TEST_ERROR=0;
 
 
 install_deployer () {
-    dpkg-deb --build $BASE_DIR/deployer \
-      && sudo dpkg --install $BASE_DIR/deployer.deb
+  dpkg-deb --build $BASE_DIR/deployer \
+    && sudo dpkg --install $BASE_DIR/deployer.deb
 }
 
 
@@ -17,33 +18,47 @@ get_tests_paths () {
 
 
 test_done () {
-    echo "OK";
-    TEST_DONE=$(($TEST_DONE + 1));
+  echo "OK";
+  TEST_DONE=$(($TEST_DONE + 1));
+}
+
+
+test_error () {
+  echo "Error [$1]";
+  TEST_ERROR=$(($TEST_ERROR + 1));
 }
 
 
 run_test () {
-    rm -rf /tmp/test-deployer;
-    mkdir  /tmp/test-deployer;
-    cd     /tmp/test-deployer;
+  rm -rf /tmp/test-deployer;
+  mkdir  /tmp/test-deployer;
+  cd     /tmp/test-deployer;
 
-    printf "$1 : "
+  printf "$1 : "
 
-    $1 > /dev/null \
-      && test_done \
-      || echo "Error [$?]";
+  $1 &> /tmp/deployer-tests-logs/${1##*/} \
+    && test_done \
+    || test_error $?;
+}
+
+
+setup_logs_folder () {
+  rm -rf /tmp/deployer-tests-logs;
+  mkdir  /tmp/deployer-tests-logs;
 }
 
 
 install_deployer > /dev/null || exit 255;
-
+setup_logs_folder;
 
 for test_path in $(get_tests_paths); 
 do
-    run_test $test_path;
+  run_test $test_path;
 done;
 
-
-echo "";
 echo "======================================================";
+
+[ "$TEST_ERROR" -gt 0 ] \
+  && echo "*** Number of failed tests [$TEST_ERROR]";
+
 echo "Done. Ran $TEST_DONE tests.";
