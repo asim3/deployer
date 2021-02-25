@@ -1,3 +1,2 @@
 install             install kubernetes requirements
-init                initiate a new project
 django              control a django project

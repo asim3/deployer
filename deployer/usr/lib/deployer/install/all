@@ -1,9 +1,0 @@
-#!/bin/bash
-
-
-find /usr/lib/deployer/install \
-    -type f \
-    -not -name 'main' \
-    -not -name 'all' \
-    -executable \
-    -exec '{}' ';'

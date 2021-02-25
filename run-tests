@@ -1,51 +1,49 @@
 #!/bin/bash
 
-OLD_DIR=$(pwd)
+
+BASE_DIR="$(dirname $BASH_SOURCE)"
 TEST_DONE=0
-
-clean_up () {
-    cd $OLD_DIR
-    unset OLD_DIR
-}
-
-
-clean_up_and_exit () {
-    echo "Error at: $1 with exit code $2"
-    clean_up;
-    exit $2;
-}
 
 
 install_deployer () {
-    dpkg-deb --build $OLD_DIR/deployer \
-      && sudo dpkg --install $OLD_DIR/deployer.deb \
-      || exit 1;
+    dpkg-deb --build $BASE_DIR/deployer \
+      && sudo dpkg --install $BASE_DIR/deployer.deb
 }
 
 
-echo_test_done () {
-    echo "Done";
+get_tests_paths () {
+  find $BASE_DIR/tests -type f -executable | sort -n
+}
+
+
+test_done () {
+    echo "OK";
     TEST_DONE=$(($TEST_DONE + 1));
 }
 
+
 run_test () {
-    printf "$1: "
-    cd /tmp/test-deployer
-    $OLD_DIR/tests/$1 > /dev/null
-    test_exit_code=$?
-    [ "$test_exit_code" -ne "0" ] && clean_up_and_exit $1 $test_exit_code \
-      || echo_test_done
+    rm -rf /tmp/test-deployer;
+    mkdir  /tmp/test-deployer;
+    cd     /tmp/test-deployer;
+
+    printf "$1 : "
+
+    $1 > /dev/null \
+      && test_done \
+      || echo "Error [$?]";
 }
 
 
-rm -rf /tmp/test-deployer
-mkdir  /tmp/test-deployer
-cd     /tmp/test-deployer
+install_deployer > /dev/null || exit 255;
 
-install_deployer > /dev/null
 
-run_test "01_test_empty_dir"
-run_test "05_initiate_project" <<< "my_stdin"
-run_test "08_test_multiple_dir"
+for test_path in $(get_tests_paths); 
+do
+    run_test $test_path;
+done;
 
-echo "Done. Ran $TEST_DONE tests."
+
+echo "";
+echo "======================================================";
+echo "Done. Ran $TEST_DONE tests.";

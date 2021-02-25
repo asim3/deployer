@@ -1,4 +1,6 @@
-install       install and collectstatic
+run           install and collectstatic
+
+init          initiate a new project
 user          createsuperuser
 
 new           add new app 

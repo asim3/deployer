@@ -11,24 +11,21 @@ clean_up () {
 }
 
 
-clean_up_and_exit () {
-    clean_up;
-    exit 1;
+print_error_and_exit () {
+  cat /usr/lib/deployer/errors/${1}.txt;
+  exit ${1};
 }
 
 
 print_help_and_exit () {
     cat /usr/lib/deployer/${library_name}/help.txt 2> /dev/null \
       || cat /usr/lib/deployer/help.txt;
-    clean_up_and_exit;
+    clean_up;
+    exit 1;
 }
 
 
 set_library_path () {
-    # if library_name has zero length
-    [ -z "$library_name" ] \
-      && print_help_and_exit;
-
     # if program_name equal to help
     [ -d /usr/lib/deployer/${library_name} ] \
       && [ "$program_name" = "help" ] \
@@ -49,8 +46,12 @@ set_library_path () {
 }
 
 
-set_library_path;
+[ -n "$library_name" ] \
+  && set_library_path \
+  || print_help_and_exit;
+
 shift;
 
-$library_path $@;
+$library_path $@ \
+  || print_error_and_exit $? ;
 clean_up;
