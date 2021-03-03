@@ -2,63 +2,28 @@
 
 
 BASE_DIR="$(dirname $BASH_SOURCE)";
-TEST_DONE=0;
-TEST_ERROR=0;
 
 
-install_deployer () {
-  dpkg-deb --build $BASE_DIR/deployer \
-    && sudo dpkg --install $BASE_DIR/deployer.deb
+build_deployer () {
+  dpkg-deb --build ${BASE_DIR}/deployer
 }
 
 
-get_tests_paths () {
-  find $BASE_DIR/tests -type f -executable | sort -n
+build_docker_image () {
+  sudo docker image build -t deployer_test_image ./
+  echo "==========================="
+  echo ">>> build_docker_image done"
+  echo "==========================="
 }
 
 
-test_done () {
-  echo "OK";
-  TEST_DONE=$(($TEST_DONE + 1));
+run_docker_image () {
+  sudo docker container run deployer_test_image
 }
 
 
-test_error () {
-  echo "Error [$1]";
-  TEST_ERROR=$(($TEST_ERROR + 1));
-}
-
-
-run_test () {
-  rm -rf /tmp/test-deployer;
-  mkdir  /tmp/test-deployer;
-  cd     /tmp/test-deployer;
-
-  printf "$1 : "
-
-  $1 &> /tmp/deployer-tests-logs/${1##*/} \
-    && test_done \
-    || test_error $?;
-}
-
-
-setup_logs_folder () {
-  rm -rf /tmp/deployer-tests-logs;
-  mkdir  /tmp/deployer-tests-logs;
-}
-
-
-install_deployer > /dev/null || exit 255;
-setup_logs_folder;
-
-for test_path in $(get_tests_paths); 
-do
-  run_test $test_path;
-done;
-
-echo "======================================================";
-
-[ "$TEST_ERROR" -gt 0 ] \
-  && echo "*** Number of failed tests [$TEST_ERROR]";
-
-echo "Done. Ran $TEST_DONE tests.";
+build_deployer \
+  && build_docker_image \
+  && run_docker_image \
+  && echo "===========================" \
+  && echo "Done."
