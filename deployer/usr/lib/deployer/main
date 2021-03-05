@@ -3,7 +3,7 @@
 
 
 # Fail on a single failed command in a pipeline
-set -eu -o pipefail
+set -eux -o pipefail
 
 
 # all values in an array
@@ -22,7 +22,7 @@ clean_up () {
 
 
 print_error_and_exit () {
-  cat ${LIBRARY_BASE}/errors/${1}.txt;
+  cat ${LIBRARY_BASE}/errors/${1}.txt >&2
   exit ${1};
 }
 
@@ -31,34 +31,31 @@ print_help_and_exit () {
   cat ${LIBRARY_BASE}/${library_name}/help.txt 2> /dev/null \
     || cat ${LIBRARY_BASE}/help.txt;
   clean_up;
-  exit 1;
+  exit 0;
 }
 
 
 set_library_path () {
-  # if program_name equal to help
-  [ -d ${LIBRARY_BASE}/${library_name} ] \
-    && [ "$program_name" = "help" ] \
-    && print_help_and_exit;
-
-  # if program_name existe
-  [  !   -d ${LIBRARY_BASE}/${library_name}/${program_name} ] \
+  [ ! -d ${LIBRARY_BASE}/${library_name}/${program_name} ] \
     && [ -x ${LIBRARY_BASE}/${library_name}/${program_name} ] \
     && library_path="${LIBRARY_BASE}/${library_name}/${program_name}" \
     && return 0;
   
-  # if main program existe
   [ -x ${LIBRARY_BASE}/${library_name}/main ] \
     && library_path="${LIBRARY_BASE}/${library_name}/main" \
     && return 0;
-
-  print_help_and_exit;
+  return 1;
 }
+
+
+[ "$program_name" = "help" ] \
+  && print_help_and_exit;
 
 
 [ -n "$library_name" ] \
   && set_library_path \
   || print_help_and_exit;
+
 
 shift;
 
