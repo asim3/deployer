@@ -1,9 +1,19 @@
 #!/bin/bash
 
 
+
+# Fail on a single failed command in a pipeline
+set -eu -o pipefail
+
+
+# all values in an array
+export ARGS=("${@,,}")
+export LIBRARY_BASE="$(dirname ${BASH_SOURCE[0]} | sed -e 's/bin/lib\/deployer/')"
+
+
 library_path="";
-library_name="${1,,}";
-program_name="${2,,}";
+library_name="${ARGS[0]:-}";
+program_name="${ARGS[1]:-}";
 
 
 clean_up () {
@@ -12,14 +22,14 @@ clean_up () {
 
 
 print_error_and_exit () {
-  cat /usr/lib/deployer/errors/${1}.txt;
+  cat ${LIBRARY_BASE}/errors/${1}.txt;
   exit ${1};
 }
 
 
 print_help_and_exit () {
-    cat /usr/lib/deployer/${library_name}/help.txt 2> /dev/null \
-      || cat /usr/lib/deployer/help.txt;
+    cat ${LIBRARY_BASE}/${library_name}/help.txt 2> /dev/null \
+      || cat ${LIBRARY_BASE}/help.txt;
     clean_up;
     exit 1;
 }
@@ -27,19 +37,19 @@ print_help_and_exit () {
 
 set_library_path () {
     # if program_name equal to help
-    [ -d /usr/lib/deployer/${library_name} ] \
+    [ -d ${LIBRARY_BASE}/${library_name} ] \
       && [ "$program_name" = "help" ] \
       && print_help_and_exit;
 
     # if program_name existe
-    [  !   -d /usr/lib/deployer/${library_name}/${program_name} ] \
-      && [ -x /usr/lib/deployer/${library_name}/${program_name} ] \
-      && library_path="/usr/lib/deployer/${library_name}/${program_name}" \
+    [  !   -d ${LIBRARY_BASE}/${library_name}/${program_name} ] \
+      && [ -x ${LIBRARY_BASE}/${library_name}/${program_name} ] \
+      && library_path="${LIBRARY_BASE}/${library_name}/${program_name}" \
       && return 0;
     
     # if main program existe
-    [ -x /usr/lib/deployer/${library_name}/main ] \
-      && library_path="/usr/lib/deployer/${library_name}/main" \
+    [ -x ${LIBRARY_BASE}/${library_name}/main ] \
+      && library_path="${LIBRARY_BASE}/${library_name}/main" \
       && return 0;
 
     print_help_and_exit;
@@ -52,6 +62,6 @@ set_library_path () {
 
 shift;
 
-$library_path $@ \
+$library_path \
   || print_error_and_exit $? ;
 clean_up;

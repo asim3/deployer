@@ -23,5 +23,5 @@ elif [ "$1" = "shell" ]; then python3 manage.py shell;
 elif [ "$1" = "user"  ]; then python3 manage.py createsuperuser;
 elif [ "$1" = "tra"   ]; then translation;
 else
-    cat /usr/lib/deployer/django/help.txt
+    cat ${LIBRARY_BASE}/django/help.txt;
 fi
