@@ -17,7 +17,7 @@ program_name="${ARGS[1]:-}";
 
 
 clean_up () {
-    unset DEPLOYER_BASE_DIR;
+  unset DEPLOYER_BASE_DIR;
 }
 
 
@@ -28,31 +28,31 @@ print_error_and_exit () {
 
 
 print_help_and_exit () {
-    cat ${LIBRARY_BASE}/${library_name}/help.txt 2> /dev/null \
-      || cat ${LIBRARY_BASE}/help.txt;
-    clean_up;
-    exit 1;
+  cat ${LIBRARY_BASE}/${library_name}/help.txt 2> /dev/null \
+    || cat ${LIBRARY_BASE}/help.txt;
+  clean_up;
+  exit 1;
 }
 
 
 set_library_path () {
-    # if program_name equal to help
-    [ -d ${LIBRARY_BASE}/${library_name} ] \
-      && [ "$program_name" = "help" ] \
-      && print_help_and_exit;
+  # if program_name equal to help
+  [ -d ${LIBRARY_BASE}/${library_name} ] \
+    && [ "$program_name" = "help" ] \
+    && print_help_and_exit;
 
-    # if program_name existe
-    [  !   -d ${LIBRARY_BASE}/${library_name}/${program_name} ] \
-      && [ -x ${LIBRARY_BASE}/${library_name}/${program_name} ] \
-      && library_path="${LIBRARY_BASE}/${library_name}/${program_name}" \
-      && return 0;
-    
-    # if main program existe
-    [ -x ${LIBRARY_BASE}/${library_name}/main ] \
-      && library_path="${LIBRARY_BASE}/${library_name}/main" \
-      && return 0;
+  # if program_name existe
+  [  !   -d ${LIBRARY_BASE}/${library_name}/${program_name} ] \
+    && [ -x ${LIBRARY_BASE}/${library_name}/${program_name} ] \
+    && library_path="${LIBRARY_BASE}/${library_name}/${program_name}" \
+    && return 0;
+  
+  # if main program existe
+  [ -x ${LIBRARY_BASE}/${library_name}/main ] \
+    && library_path="${LIBRARY_BASE}/${library_name}/main" \
+    && return 0;
 
-    print_help_and_exit;
+  print_help_and_exit;
 }
 
 
