@@ -1,2 +1,4 @@
 install             install kubernetes requirements
 django              control a django project
+
+new                 add new project to the current directory

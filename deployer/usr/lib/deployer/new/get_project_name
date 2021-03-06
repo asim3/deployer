@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+read_project_name () {
+  printf "Kindly enter your project name: "; 
+  read PROJECT_NAME;
+}
+
+
+[ -n "${ARGS[2]:-}" ] \
+  && PROJECT_NAME="${ARGS[2]}" \
+  || read_project_name \
+
+
+[ -n "$PROJECT_NAME" ] \
+  || exit 106
+
+
+[ ! -d "$PROJECT_NAME" ] \
+  && mkdir ./${PROJECT_NAME}
+
+
+export PROJECT_NAME

@@ -1,0 +1,1 @@
+Error will collecting static files Django.

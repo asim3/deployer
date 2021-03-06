@@ -1,2 +1,2 @@
-Could not find the values/main.ini file!
-Kindly run: deployer init
+Could not find the manage.py file in the current directory! 
+Kindly relocate to your Django project or start new one by running: deployer init

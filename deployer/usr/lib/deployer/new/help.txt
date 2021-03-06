@@ -1,0 +1,1 @@
+django              add new django project to the current directory

@@ -3,7 +3,7 @@
 
 
 # Fail on a single failed command in a pipeline
-set -eux -o pipefail
+set -eu -o pipefail
 
 
 # all values in an array

@@ -1,2 +1,1 @@
-There are multiple values/main.ini files!
-Kindly relocate to one of them!
+The project name already exist in the current directory

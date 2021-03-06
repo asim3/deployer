@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+set -eu -o pipefail
+
+
+clean_up_exit_107 () {
+    rm -rf ./${PROJECT_NAME}/django
+    exit 107
+}
+
+
+source ${LIBRARY_BASE}/new/get_project_name
+
+mkdir ./${PROJECT_NAME}/django
+
+python3 -m venv ./${PROJECT_NAME}/django/.venv
+
+source ./${PROJECT_NAME}/django/.venv/bin/activate
+
+pip3 install Django \
+  && django-admin startproject ${PROJECT_NAME} ./${PROJECT_NAME}/django \
+  && pip3 freeze > ./${PROJECT_NAME}/django/requirements.txt \
+  && echo "TODO: add .gitignore" \
+  || clean_up_exit_107
+# TODO: add STATIC_ROOT to settings
+# TODO: add add .gitignore
+
+source ${LIBRARY_BASE}/django/main

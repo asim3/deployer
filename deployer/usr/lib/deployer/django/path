@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+DJANGO_PATH="$(dirname $(find . -not -path '*/\.*' -name manage.py 2> /dev/null | sort | head -n 1))"
+
+[ -n "$DJANGO_PATH" ] \
+  && export DJANGO_PATH \
+  || exit 104
