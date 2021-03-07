@@ -4,6 +4,12 @@
 set -eu -o pipefail
 
 
+add_extra_settings () {
+  cat ${LIBRARY_BASE}/new/templates/django/settings.py >> \
+    ./${PROJECT_NAME}/django/${PROJECT_NAME}/settings.py
+}
+
+
 clean_up_exit_107 () {
     rm -rf ./${PROJECT_NAME}/django
     exit 107
@@ -21,9 +27,9 @@ source ./${PROJECT_NAME}/django/.venv/bin/activate
 pip3 install Django \
   && django-admin startproject ${PROJECT_NAME} ./${PROJECT_NAME}/django \
   && pip3 freeze > ./${PROJECT_NAME}/django/requirements.txt \
-  && echo "TODO: add .gitignore" \
+  && add_extra_settings \
   || clean_up_exit_107
-# TODO: add STATIC_ROOT to settings
-# TODO: add add .gitignore
 
-source ${LIBRARY_BASE}/django/main
+export PROJECT_NAME
+
+source ${LIBRARY_BASE}/django/main 

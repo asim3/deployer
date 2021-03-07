@@ -1,9 +1,6 @@
 #!/bin/bash
 
 
-source ${LIBRARY_BASE}/django/path
-
-
 install_and_collectstatic() {
   pip3 install -r ./requirements.txt \
     && python3 manage.py makemigrations \
@@ -12,6 +9,7 @@ install_and_collectstatic() {
 }
 
 
+source ${LIBRARY_BASE}/django/path
 source ${DJANGO_PATH}/.venv/bin/activate
 cd ${DJANGO_PATH}
 
@@ -28,7 +26,8 @@ python3 manage.py collectstatic --noinput \
 
 python3 manage.py runserver
 
-echo "Stop django"
+echo ""
+echo "Stopping django"
 
 
 # translation() {

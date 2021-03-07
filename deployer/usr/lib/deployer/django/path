@@ -1,7 +1,18 @@
 #!/bin/bash
 
 
-DJANGO_PATH="$(dirname $(find . -not -path '*/\.*' -name manage.py 2> /dev/null | sort | head -n 1))"
+find_django_path () {
+  manage_path="$(find $(pwd) -not -path '*/\.*' -name manage.py 2> /dev/null | sort | head -n 1)"
+  [ -n "${manage_path:-}" ] \
+    && DJANGO_PATH="$(dirname "${manage_path}" 2> /dev/null)" \
+    || exit 104
+}
+
+
+[ -n "${PROJECT_NAME:-}" ] \
+  && DJANGO_PATH="$(pwd)/${PROJECT_NAME}/django" \
+  || find_django_path
+
 
 [ -n "$DJANGO_PATH" ] \
   && export DJANGO_PATH \

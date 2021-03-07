@@ -17,7 +17,9 @@ read_project_name () {
 
 
 [ ! -d "$PROJECT_NAME" ] \
-  && mkdir ./${PROJECT_NAME}
+  && mkdir ./${PROJECT_NAME} \
+  && cp ${LIBRARY_BASE}/new/templates/.gitignore ./${PROJECT_NAME} \
+  || exit 105
 
 
 export PROJECT_NAME
