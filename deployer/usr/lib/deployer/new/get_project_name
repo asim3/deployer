@@ -1,14 +1,20 @@
 #!/bin/bash
 
 
+set -eu -o pipefail
+
+export ARGS=("${@,,}")
+
+
 read_project_name () {
   printf "Kindly enter your project name: "; 
   read PROJECT_NAME;
 }
 
 
-[ -n "${ARGS[2]:-}" ] \
-  && PROJECT_NAME="${ARGS[2]}" \
+[ -n "${ARGS[1]:-}" ] \
+  && [ ! "skip" = "${ARGS[1]}" ] \
+  && PROJECT_NAME="${ARGS[1]}" \
   || read_project_name \
 
 

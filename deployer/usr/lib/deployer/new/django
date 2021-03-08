@@ -3,6 +3,8 @@
 
 set -eu -o pipefail
 
+export ARGS=("${@,,}")
+
 
 add_extra_settings () {
   cat ${LIBRARY_BASE}/new/templates/django/settings.py >> \
@@ -16,7 +18,7 @@ clean_up_exit_107 () {
 }
 
 
-source ${LIBRARY_BASE}/new/get_project_name
+source ${LIBRARY_BASE}/new/get_project_name $@
 
 mkdir ./${PROJECT_NAME}/django
 
@@ -32,4 +34,7 @@ pip3 install Django \
 
 export PROJECT_NAME
 
-source ${LIBRARY_BASE}/django/main 
+
+
+[ "skip" = "${ARGS[1]:-}" ] \
+  || source ${LIBRARY_BASE}/django/main 

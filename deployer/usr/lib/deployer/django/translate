@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+source ${LIBRARY_BASE}/django/venv
+
+[[ -d ./locale ]] || mkdir locale 
+python3 manage.py makemessages -l ar;
+python3 manage.py compilemessages;

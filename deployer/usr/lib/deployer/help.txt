@@ -1,4 +1,11 @@
-install             install kubernetes requirements
-django              control a django project
 
-new                 add new project to the current directory
+Usage:  deployer COMMAND
+
+Deploy a Scalable and Secure Applications with Kubernetes.
+
+Commands:
+  new         Add new project to the current directory
+  django      Manage a Django project
+  install     Install kubernetes requirements
+
+Run 'deployer COMMAND help' for more information on a command.

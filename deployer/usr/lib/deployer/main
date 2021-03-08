@@ -59,6 +59,6 @@ set_library_path () {
 
 shift;
 
-$library_path \
+$library_path $@ \
   || print_error_and_exit $? ;
 clean_up;

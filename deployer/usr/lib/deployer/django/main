@@ -1,17 +1,9 @@
 #!/bin/bash
 
-
-install_and_collectstatic() {
-  pip3 install -r ./requirements.txt \
-    && python3 manage.py makemigrations \
-    && python3 manage.py migrate \
-    && python3 manage.py collectstatic --noinput
-}
+set -eu -o pipefail
 
 
-source ${LIBRARY_BASE}/django/path
-source ${DJANGO_PATH}/.venv/bin/activate
-cd ${DJANGO_PATH}
+source ${LIBRARY_BASE}/django/venv
 
 
 pip3 install -r ./requirements.txt \
@@ -28,21 +20,3 @@ python3 manage.py runserver
 
 echo ""
 echo "Stopping django"
-
-
-# translation() {
-#     [[ -d ./locale ]] || mkdir locale 
-#     python3 manage.py makemessages -l ar;
-#     python3 manage.py compilemessages;
-# }
-
-
-# if   [ "$1" = "install" ]; then install_and_collectstatic;
-# elif [ "$1" = "new"   ]; then python3 manage.py startapp $@;
-# elif [ "$1" = "test"  ]; then python3 manage.py test $@;
-# elif [ "$1" = "shell" ]; then python3 manage.py shell;
-# elif [ "$1" = "user"  ]; then python3 manage.py createsuperuser;
-# elif [ "$1" = "tra"   ]; then translation;
-# else
-#     cat ${LIBRARY_BASE}/django/help.txt;
-# fi

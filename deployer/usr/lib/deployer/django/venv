@@ -17,3 +17,7 @@ find_django_path () {
 [ -n "$DJANGO_PATH" ] \
   && export DJANGO_PATH \
   || exit 104
+
+
+source ${DJANGO_PATH}/.venv/bin/activate
+cd ${DJANGO_PATH}

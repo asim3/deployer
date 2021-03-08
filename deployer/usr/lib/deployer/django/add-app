@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+source ${LIBRARY_BASE}/django/venv
+
+python3 manage.py startapp ${ARGS}

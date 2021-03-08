@@ -1,9 +1,13 @@
-run           install and collectstatic
 
-user          createsuperuser
+Usage:  deployer django COMMAND
 
-new           add new app 
-tra           translation
+Deploy a Scalable and Secure Applications with Kubernetes.
 
-test          run tests
-shell         run shell
+Commands:
+  test
+  translate
+  user
+  add-app
+  shell
+
+Run 'deployer new django' to add a new Django project in the current directory.
