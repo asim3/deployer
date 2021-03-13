@@ -12,7 +12,6 @@ build_deployer () {
 build_docker_image () {
   echo "building a docker image"
   sudo docker image build -t deployer_test_image ${BASE_DIR} > /dev/null
-  echo "building a docker image were completed."
 }
 
 
