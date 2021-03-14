@@ -1,8 +1,10 @@
 #!/bin/bash
 
+set -eu -o pipefail
+
 
 find_django_path () {
-  manage_path="$(find $(pwd) -not -path '*/\.*' -name manage.py 2> /dev/null | sort | head -n 1)"
+  manage_path="$(find $(pwd) -not -path '*/\.*' -name manage.py 2> /dev/null || echo '' | sort | head -n 1)"
   [ -n "${manage_path:-}" ] \
     && DJANGO_PATH="$(dirname "${manage_path}" 2> /dev/null)" \
     || exit 104
@@ -14,10 +16,12 @@ find_django_path () {
   || find_django_path
 
 
-[ -n "$DJANGO_PATH" ] \
+[ -n "${DJANGO_PATH:-}" ] \
   && export DJANGO_PATH \
   || exit 104
 
 
-source ${DJANGO_PATH}/.venv/bin/activate
+source ${DJANGO_PATH}/.venv/bin/activate \
+  || echo ''
+
 cd ${DJANGO_PATH}

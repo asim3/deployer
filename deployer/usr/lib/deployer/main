@@ -22,7 +22,7 @@ clean_up () {
 
 
 print_error_and_exit () {
-  cat ${LIBRARY_BASE}/errors/${1}.txt >&2
+  cat ${LIBRARY_BASE}/errors/${1}.txt >&2 2> /dev/null
   exit ${1};
 }
 
@@ -44,7 +44,8 @@ set_library_path () {
   [ -x ${LIBRARY_BASE}/${library_name}/main ] \
     && library_path="${LIBRARY_BASE}/${library_name}/main" \
     && return 0;
-  return 1;
+
+  print_error_and_exit 2;
 }
 
 
@@ -53,12 +54,14 @@ set_library_path () {
 
 
 [ -n "$library_name" ] \
-  && set_library_path \
-  || print_help_and_exit;
+  && set_library_path
 
+
+[ -n "$program_name" ] \
+  && shift;
 
 shift;
 
-$library_path $@ \
+${library_path} $@ \
   || print_error_and_exit $? ;
 clean_up;

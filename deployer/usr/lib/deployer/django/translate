@@ -3,6 +3,8 @@
 
 source ${LIBRARY_BASE}/django/venv
 
-[[ -d ./locale ]] || mkdir locale 
+
+[[ -d ./locale ]] || mkdir locale || exit 110
+
 python3 manage.py makemessages -l ar;
 python3 manage.py compilemessages;
