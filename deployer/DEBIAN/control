@@ -1,6 +1,6 @@
 Package: deployer
 Version: 0.1
-Depends: curl, python3-venv
+Depends: curl, python3-venv, lsb-release, sudo
 Section: custom
 Priority: optional
 Architecture: all

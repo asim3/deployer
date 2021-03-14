@@ -1,1 +1,2 @@
-Fatal error.
+Error: unknown command
+Run 'deployer help' for usage.
