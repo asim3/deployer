@@ -16,6 +16,7 @@ build_docker_image () {
 
 
 run_docker_image () {
+  echo "run deployer test image"
   sudo docker container run deployer_test_image
 }
 
