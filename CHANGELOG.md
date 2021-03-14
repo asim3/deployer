@@ -3,6 +3,10 @@
 
 ## Version 0.1.1 - 2021
 
+Added:
+
+* Install docker.
+
 Fixed:
 
 * handling permission denied error while adding new Django project.

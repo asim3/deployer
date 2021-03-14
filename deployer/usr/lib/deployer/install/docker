@@ -3,30 +3,19 @@
 # https://docs.docker.com/engine/install/ubuntu/
 
 
-distributor=$(lsb_release -is)
-distributor_codename=$(lsb_release -cs)
-docker_apt_repository="deb [arch=amd64] https://download.docker.com/linux/${distributor,,} ${distributor_codename,,} stable"
-
-
-apt_install_requirements () {
-  sudo apt-get -y update \
-    software-properties-common \
-    apt-transport-https \
-    ca-certificates \
-    gnupg2 \
-    curl
+uninstall_old_versions () {
+  sudo apt-get -y remove docker docker-engine docker.io containerd runc \
+    || return 0
 }
 
 
-apt_install_docker () {
+install_requirements () {
   sudo apt-get -y update \
-    docker-ce \
-    docker-ce-cli \
-    containerd.io
+    && sudo apt-get -y install apt-transport-https ca-certificates gnupg lsb-release
 }
 
 
-add_docker_apt_key () {
+add_docker_official_GPG_key () {
   curl -Lf https://download.docker.com/linux/${distributor,,}/gpg -o /tmp/gpg \
     && sudo apt-key add /tmp/gpg \
     && sudo apt-key fingerprint 0EBFCD88
@@ -34,13 +23,26 @@ add_docker_apt_key () {
 }
 
 
-sudo apt-get -y remove docker docker-engine docker.io runc \
-  && sudo apt-get -y update \
-  && apt_install_requirements \
-  && add_docker_apt_key \
-  && sudo add-apt-repository ${docker_apt_repository} \
-  && sudo apt-get -y update \
+add_docker_stable_repository () {
+  cat <<EOF | sudo tee /etc/apt/sources.list.d/docker.list
+deb [arch=amd64] https://download.docker.com/linux/${distributor,,} ${distributor_codename,,} stable
+EOF
+}
+
+
+apt_install_docker () {
+  sudo apt-get -y update \
+    && sudo apt-get -y install docker-ce docker-ce-cli containerd.io
+}
+
+
+distributor=$(lsb_release -is)
+distributor_codename=$(lsb_release -cs)
+
+
+uninstall_old_versions \
+  && install_requirements \
+  && add_docker_official_GPG_key \
+  && add_docker_stable_repository \
   && apt_install_docker \
   && echo "done installing docker $(sudo docker version --format='{{.Client.Version}}')"
-
-sudo docker swarm init

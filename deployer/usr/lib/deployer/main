@@ -57,10 +57,8 @@ set_library_path () {
   && set_library_path
 
 
-[ -n "$program_name" ] \
-  && shift;
-
 shift;
+
 
 ${library_path} $@ \
   || print_error_and_exit $? ;

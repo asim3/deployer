@@ -1,7 +1,4 @@
 #!/bin/bash
 
 
-/usr/lib/deployer/install/virtualbox;
-/usr/lib/deployer/install/docker;
-/usr/lib/deployer/install/kubectl;
-/usr/lib/deployer/install/minikube;
+cat ${LIBRARY_BASE}/install/help.txt;

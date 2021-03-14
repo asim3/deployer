@@ -1,5 +1,12 @@
-all                 install all
-docker              install docker
-kubectl             install kubectl
-minikube            install minikube
-virtualbox          install virtualbox
+
+Usage:  deployer install COMMAND
+
+Deploy a Scalable and Secure Applications with Kubernetes.
+
+Commands:
+  docker              install docker
+  kubectl             install kubectl
+  minikube            install minikube
+  virtualbox          install virtualbox
+  helm                install helm
+  all                 install all
