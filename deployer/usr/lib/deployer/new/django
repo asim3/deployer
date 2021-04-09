@@ -31,6 +31,8 @@ pip3 install Django \
   && pip3 freeze > ./${PROJECT_NAME}/django/requirements.txt \
   && add_extra_settings \
   || clean_up_exit_107
+# && setup_django_settings \
+# && add_docker_file \
 
 export PROJECT_NAME
 
